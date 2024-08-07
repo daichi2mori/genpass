@@ -24,10 +24,6 @@ export function generatePassword(
   includeNumbers: boolean,
   includeSymbols: boolean
 ): string {
-  if (length < 1) {
-    throw new Error('パスワードの長さは1以上である必要があります。');
-  }
-
   let chars = '';
   const requiredChars: string[] = [];
 
@@ -48,13 +44,7 @@ export function generatePassword(
     requiredChars.push(getRandomChar(symbolChars));
   }
 
-  if (chars === '') {
-    throw new Error('少なくとも1つの文字タイプを選択してください。');
-  }
-
   const passwordArray: string[] = requiredChars.slice();
-
-  console.log(passwordArray)
 
   for (let i = requiredChars.length; i < length; i++) {
     passwordArray.push(getRandomChar(chars));
