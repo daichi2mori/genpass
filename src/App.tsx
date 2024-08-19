@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import CharacterOptions from "./components/characterOptions";
+import GeneratedButton from "./components/generatedButton";
 import LengthOptions from "./components/lengthOptions";
+import ShowPassword from "./components/showPassword";
 import { generatePassword } from "./passwordGenerator";
 
 function App() {
@@ -138,37 +140,14 @@ function App() {
 				</div>
 			</div>
 
-			<div className="grid place-items-center">
-				<button
-					type="button"
-					onClick={handleGeneratePassword}
-					text="white sm"
-					bg="blue-700 hover:blue-800"
-					p="x-5 y-2.5"
-					mt="5"
-					className="font-medium rounded-lg focus:outline-none"
-				>
-					パスワードを生成
-				</button>
-			</div>
+			<GeneratedButton handleGeneratePassword={handleGeneratePassword} />
 
 			{generatedPassword && (
-				<div className="mt-5 mr-2 flex items-center gap-3">
-					<input
-						type="text"
-						value={generatedPassword || ""}
-						ref={passwordElement}
-						onFocus={(e) => e.currentTarget.select()}
-						border="slate-300 disabled:slate-200 focus:blue-500"
-						className="grow border rounded-lg focus:ring-blue-500 focus:outline-none p-2.5"
-						readOnly
-					/>
-					<button
-						type="button"
-						className="i-mdi-content-copy"
-						onClick={handleCopyPassword}
-					/>
-				</div>
+				<ShowPassword
+					generatedPassword={generatedPassword}
+					passwordElement={passwordElement}
+					handleCopyPassword={handleCopyPassword}
+				/>
 			)}
 
 			{showToast && (
