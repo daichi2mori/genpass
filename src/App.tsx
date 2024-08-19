@@ -4,7 +4,7 @@ import LengthOptions from "./components/lengthOptions";
 import { generatePassword } from "./passwordGenerator";
 
 function App() {
-	const [length, setLength] = useState("64");
+	const [length, setLength] = useState("32");
 	const [includeUppercase, setIncludeUppercase] = useState(true);
 	const [includeLowercase, setIncludeLowercase] = useState(true);
 	const [includeNumbers, setIncludeNumbers] = useState(true);
@@ -43,6 +43,16 @@ function App() {
 			case "symbol":
 				setIncludeSymbols(checked);
 				break;
+		}
+	};
+
+	const handleClickLength = (
+		e: React.MouseEvent<HTMLInputElement, MouseEvent>,
+	) => {
+		const { name, value } = e.currentTarget;
+
+		if (name === "length") {
+			setLength(value);
 		}
 	};
 
@@ -97,11 +107,10 @@ function App() {
 				</div>
 				<div className="bg-gray-50 flex flex-col gap-2 p-3">
 					<LengthOptions
-						length={length}
 						radioInputElement={radioInputElement}
 						radioCustomInputElement={radioCustomInputElement}
-						setLength={setLength}
 						handleSetInput={handleSetInput}
+						handleClickLength={handleClickLength}
 					/>
 					{lengthError && (
 						<p className="text-red text-xs md:text-base break-words">

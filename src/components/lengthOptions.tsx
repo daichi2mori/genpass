@@ -1,15 +1,15 @@
 const LengthOptions = ({
-	length,
 	radioInputElement,
 	radioCustomInputElement,
-	setLength,
 	handleSetInput,
+	handleClickLength,
 }: {
-	length: string;
 	radioInputElement: React.RefObject<HTMLInputElement>;
 	radioCustomInputElement: React.RefObject<HTMLInputElement>;
-	setLength: React.Dispatch<React.SetStateAction<string>>;
 	handleSetInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	handleClickLength: (
+		e: React.MouseEvent<HTMLInputElement, MouseEvent>,
+	) => void;
 }) => {
 	return (
 		<>
@@ -21,7 +21,7 @@ const LengthOptions = ({
 						className="aspect-square w-4"
 						value={len}
 						ref={len === 32 ? radioInputElement : null}
-						onClick={(e) => setLength(e.currentTarget.value)}
+						onClick={(e) => handleClickLength(e)}
 					/>
 					{len}
 				</label>
@@ -36,14 +36,15 @@ const LengthOptions = ({
 				<span>
 					<input
 						type="number"
-						value={length}
+						defaultValue={64}
 						name="length"
-						onClick={() => {
+						onClick={(e) => {
 							if (radioCustomInputElement.current) {
 								radioCustomInputElement.current.checked = true;
 							}
+							handleClickLength(e);
 						}}
-						onChange={handleSetInput}
+						onChange={(e) => handleSetInput(e)}
 						border="slate-300 disabled:slate-200 focus:blue-500"
 						className="px-2 py-1 text-center w-12 border focus:ring-blue-500 focus:outline-none rounded-lg no-spinner"
 					/>
