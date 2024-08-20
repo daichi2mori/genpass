@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 type LengthOptionsProps = {
 	radioInputElement: React.RefObject<HTMLInputElement>;
 	radioCustomInputElement: React.RefObject<HTMLInputElement>;
@@ -13,6 +15,8 @@ const LengthOptions: React.FC<LengthOptionsProps> = ({
 	handleSetInput,
 	handleClickLength,
 }) => {
+	const [variableLength, setVariableLength] = useState(64);
+
 	const lengthValues = [16, 32];
 
 	return (
@@ -34,13 +38,15 @@ const LengthOptions: React.FC<LengthOptionsProps> = ({
 				<input
 					type="radio"
 					name="length"
+					value={variableLength}
 					className="aspect-square w-4"
 					ref={radioCustomInputElement}
+					onClick={(e) => handleClickLength(e)}
 				/>
 				<span>
 					<input
 						type="number"
-						defaultValue={64}
+						value={variableLength}
 						name="length"
 						onClick={(e) => {
 							if (radioCustomInputElement.current) {
@@ -48,7 +54,10 @@ const LengthOptions: React.FC<LengthOptionsProps> = ({
 							}
 							handleClickLength(e);
 						}}
-						onChange={handleSetInput}
+						onChange={(e) => {
+							setVariableLength(Number(e.target.value));
+							handleSetInput(e);
+						}}
 						className="px-2 py-1 text-center w-12 border focus:ring-blue-500 focus:outline-none rounded-lg no-spinner"
 					/>
 				</span>
