@@ -1,28 +1,27 @@
 type CharacterOptionsProps = {
-	includeLowercase: boolean;
-	includeUppercase: boolean;
-	includeNumbers: boolean;
-	includeSymbols: boolean;
+	options: {
+		uppercase: boolean;
+		lowercase: boolean;
+		number: boolean;
+		symbol: boolean;
+	};
 	handleSetInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const CharacterOptions: React.FC<CharacterOptionsProps> = ({
-	includeLowercase,
-	includeUppercase,
-	includeNumbers,
-	includeSymbols,
+	options,
 	handleSetInput,
 }) => {
-	const options = [
-		{ name: "lowercase", label: "英字（小文字）", checked: includeLowercase },
-		{ name: "uppercase", label: "英字（大文字）", checked: includeUppercase },
-		{ name: "number", label: "数字", checked: includeNumbers },
-		{ name: "symbol", label: "記号", checked: includeSymbols },
+	const characters = [
+		{ name: "lowercase", label: "英字（小文字）", checked: options.lowercase },
+		{ name: "uppercase", label: "英字（大文字）", checked: options.uppercase },
+		{ name: "number", label: "数字", checked: options.number },
+		{ name: "symbol", label: "記号", checked: options.symbol },
 	];
 
 	return (
 		<>
-			{options.map(({ name, label, checked }) => (
+			{characters.map(({ name, label, checked }) => (
 				<label className="label-style" key={name}>
 					<input
 						type="checkbox"

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import CharacterOptions from "./components/characterOptions";
 import GeneratedButton from "./components/generatedButton";
 import LengthOptions from "./components/lengthOptions";
@@ -6,62 +6,41 @@ import ShowPassword from "./components/showPassword";
 import { generatePassword } from "./passwordGenerator";
 
 function App() {
-	const [length, setLength] = useState("32");
-	const [includeUppercase, setIncludeUppercase] = useState(true);
-	const [includeLowercase, setIncludeLowercase] = useState(true);
-	const [includeNumbers, setIncludeNumbers] = useState(true);
-	const [includeSymbols, setIncludeSymbols] = useState(true);
-	const [generatedPassword, setGeneratedPassword] = useState("");
 	const [lengthError, setLengthError] = useState(false);
 	const [inputError, setInputError] = useState(false);
+
+	const [length, setLength] = useState("32");
+	const [options, setOptions] = useState({
+		uppercase: true,
+		lowercase: true,
+		number: true,
+		symbol: true,
+	});
+	const [generatedPassword, setGeneratedPassword] = useState("");
 	const [showToast, setShowToast] = useState(false);
 
-	const radioInputElement = useRef<HTMLInputElement>(null);
-	const radioCustomInputElement = useRef<HTMLInputElement>(null);
 	const passwordElement = useRef<HTMLInputElement>(null);
-
-	useEffect(() => {
-		if (radioInputElement.current) {
-			radioInputElement.current.checked = true;
-		}
-	}, []);
 
 	const handleSetInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value, checked } = e.target;
 
-		switch (name) {
-			case "length":
-				setLength(value);
-				break;
-			case "uppercase":
-				setIncludeUppercase(checked);
-				break;
-			case "lowercase":
-				setIncludeLowercase(checked);
-				break;
-			case "number":
-				setIncludeNumbers(checked);
-				break;
-			case "symbol":
-				setIncludeSymbols(checked);
-				break;
-		}
-	};
-
-	const handleClickLength = (
-		e: React.MouseEvent<HTMLInputElement, MouseEvent>,
-	) => {
-		const { name, value } = e.currentTarget;
-
 		if (name === "length") {
 			setLength(value);
+		} else {
+			setOptions((prev) => ({
+				...prev,
+				[name]: checked,
+			}));
 		}
 	};
 
 	const validateInputs = () => {
 		const isLengthValid = Number(length) >= 4;
 		const isInputValid =
-			includeUppercase || includeLowercase || includeNumbers || includeSymbols;
+			options.uppercase ||
+			options.lowercase ||
+			options.number ||
+			options.symbol;
 
 		setLengthError(!isLengthValid);
 		setInputError(!isInputValid);
@@ -79,10 +58,10 @@ function App() {
 
 		const password = generatePassword(
 			length,
-			includeUppercase,
-			includeLowercase,
-			includeNumbers,
-			includeSymbols,
+			options.uppercase,
+			options.lowercase,
+			options.number,
+			options.symbol,
 		);
 		setGeneratedPassword(password);
 	};
@@ -109,10 +88,8 @@ function App() {
 				</div>
 				<div className="bg-gray-50 flex flex-col gap-2 p-3">
 					<LengthOptions
-						radioInputElement={radioInputElement}
-						radioCustomInputElement={radioCustomInputElement}
+						setLength={setLength}
 						handleSetInput={handleSetInput}
-						handleClickLength={handleClickLength}
 					/>
 					{lengthError && (
 						<p className="text-red text-xs md:text-base break-words">
@@ -125,13 +102,7 @@ function App() {
 					文字種
 				</div>
 				<div className="bg-gray-50 flex flex-col gap-2 p-3">
-					<CharacterOptions
-						includeLowercase={includeLowercase}
-						includeUppercase={includeUppercase}
-						includeNumbers={includeNumbers}
-						includeSymbols={includeSymbols}
-						handleSetInput={handleSetInput}
-					/>
+					<CharacterOptions options={options} handleSetInput={handleSetInput} />
 					{inputError && (
 						<p className="text-red text-xs md:text-base break-words">
 							少なくとも1つの文字タイプを選択してください
